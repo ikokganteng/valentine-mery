@@ -149,17 +149,17 @@ html,body{
            muted
            loop
            playsinline
-           preload="auto">
+           preload="metadata">
         <source src="video/romantis1.mp4">
     </video>
 </div>
 
 <!-- ===== VIDEO 2–13 (NO AUTOPLAY) ===== -->
 <script>
-for(let i=2;i<=13;i++){
+for(let i=2;i<=12;i++){
     document.write(`
     <div class="card">
-        <video playsinline preload="none">
+        <video playsinline preload="metadata">
             <source src="video/romantis${i}.mp4">
         </video>
     </div>
@@ -256,6 +256,8 @@ function playActiveVideo(){
     video.onended = () => {
         if(musicOn){
             music.play().catch(()=>{});
+            updateMusicButton();
+
         }
     };
 }
