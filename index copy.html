@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Mery 🤍</title>
+
+<style>
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Georgia',serif;
+    background:radial-gradient(circle at top,#2c5364,#0f2027);
+    color:#fff;
+}
+
+.wrapper{
+    width:100%;
+    max-width:420px;
+    height:100vh;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:20px;
+    box-sizing:border-box;
+}
+
+.title{
+    font-size:26px;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.title span{
+    font-size:17px;
+    opacity:.9;
+}
+
+.music-toggle button{
+    background:rgba(255,255,255,.25);
+    backdrop-filter:blur(6px);
+    border:none;
+    color:#fff;
+    padding:8px 18px;
+    border-radius:20px;
+    font-size:14px;
+}
+
+.music-text{
+    font-size:12px;
+    margin:6px 0 14px;
+    opacity:.85;
+}
+
+.carousel{
+    width:100%;
+    max-width:360px;
+    height:72vh;
+    position:relative;
+    perspective:1200px;
+}
+
+.card{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:300px;
+    height:100%;
+    padding:12px;
+    background:rgba(255,255,255,.12);
+    border-radius:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+    transform-style:preserve-3d;
+    transition:.5s ease;
+    opacity:0;
+}
+
+.card video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:16px;
+}
+
+.card.center{
+    transform:translateX(-50%) scale(1);
+    opacity:1;
+    z-index:3;
+}
+
+.card.left{
+    transform:translateX(-120%) scale(.85) rotateY(20deg);
+    opacity:.35;
+}
+
+.card.right{
+    transform:translateX(20%) scale(.85) rotateY(-20deg);
+    opacity:.35;
+}
+
+.nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,.25);
+    border:none;
+    color:#fff;
+    font-size:20px;
+    padding:6px 10px;
+    border-radius:50%;
+}
+
+.nav.prev{ left:-10px; }
+.nav.next{ right:-10px; }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<h1 class="title">
+    Happy Valentine<br>
+    <span>Mery Cahya Bunga 🤍</span>
+</h1>
+
+<div class="music-toggle">
+    <button onclick="toggleMusic()" id="musicBtn">🎵 Play Music</button>
+</div>
+<div class="music-text" id="musicText">
+    sentuh dulu ya sayang 🤍
+</div>
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="music/romantis1.mp3">
+</audio>
+
+<div class="carousel">
+
+<!-- ===== 13 VIDEO ===== -->
+<script>
+for(let i=1;i<=13;i++){
+    document.write(`
+    <div class="card">
+        <video muted playsinline preload="none">
+            <source src="video/romantis${i}.mp4">
+        </video>
+    </div>
+    `);
+}
+</script>
+
+<button class="nav prev" onclick="prev()">❮</button>
+<button class="nav next" onclick="next()">❯</button>
+
+</div>
+</div>
+
+<script>
+const cards=document.querySelectorAll('.card');
+const music=document.getElementById('bgMusic');
+const musicBtn=document.getElementById('musicBtn');
+const musicText=document.getElementById('musicText');
+
+let index=0;
+let musicOn=false;
+
+function update(){
+    cards.forEach((card,i)=>{
+        card.className='card';
+        const video=card.querySelector('video');
+        video.pause();
+
+        if(i===index){
+            card.classList.add('center');
+            video.play();
+        }
+        else if(i===(index+1)%cards.length){
+            card.classList.add('right');
+        }
+        else if(i===(index-1+cards.length)%cards.length){
+            card.classList.add('left');
+        }
+    });
+}
+
+function next(){
+    index=(index+1)%cards.length;
+    update();
+}
+function prev(){
+    index=(index-1+cards.length)%cards.length;
+    update();
+}
+
+function toggleMusic(){
+    if(!musicOn){
+        music.play();
+        musicBtn.innerText="⏸ Pause Music";
+        musicText.innerText="aku tau kamu bakal klik 😆💖";
+    }else{
+        music.pause();
+        musicBtn.innerText="🎵 Play Music";
+        musicText.innerText="dinyalain lagi ya sayang";
+    }
+    musicOn=!musicOn;
+}
+
+update();
+
+/* swipe hp */
+let startX=0;
+const carousel=document.querySelector('.carousel');
+
+carousel.addEventListener('touchstart',e=>{
+    startX=e.touches[0].clientX;
+});
+
+carousel.addEventListener('touchend',e=>{
+    let diff=startX-e.changedTouches[0].clientX;
+    if(diff>50) next();
+    if(diff<-50) prev();
+});
+</script>
+
+</body>
+</html>
